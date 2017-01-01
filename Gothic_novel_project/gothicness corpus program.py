@@ -22,6 +22,7 @@ for novel in os.listdir("C:\\Users\\Mickey\\Documents\\Github\\Gothicness-Percen
 			name_free = " ".join(ft for ft in punc_free if ft not in name)
 			tokens = nltk.word_tokenize(name_free)
 			tagged = nltk.pos_tag(tokens)
+			print(tagged[:50])
 			only_nouns_verbs_and_adjectives = []
 			for word in tagged:
 				word = list(word)
@@ -42,9 +43,49 @@ import gensim
 from gensim import corpora
 dictionary = corpora.Dictionary(cleannovellist)
 goth_work_matrix = [dictionary.doc2bow(gothicwork) for gothicwork in cleannovellist]
-Lda = gensim.models.ldamodel.LdaModel
-ldamodel = Lda(goth_work_matrix, num_topics=10, id2word = dictionary, passes = 20)
-print(ldamodel.print_topics(num_topics=10, num_words=25))
+Lda = gensim.models.ldamodel.LdaModel(goth_work_matrix, num_topics = 15, id2word = dictionary, passes = 20, minimum_probability = 0 )
+for i in range(len(cleannovellist)):
+	distr_of_topics_per_book = Lda[goth_work_matrix[i]]
+percentages = []
+booknumber = 0
+for book in distr_of_topics:
+	gothicness = 0
+	for theme in book:
+		for i in str(theme[0]):
+			gothicness += theme[1]
+	booknumber += 1
+	gothicnesspercentage = booknumber , (gothicness*100)
+	percentages.append(gothicnesspercentage)
+bookinformation = []
+for novel in novellist:
+	informationlist = []
+	for text in novel:
+		text = text.split('\n')
+		name = text[0]
+		author = text[2]
+		publication_date = text[4]
+		informationlist.append(name)
+		informationlist.append(author)
+		informationlist.append(publication_date)
+	bookinformation.append(informationlist)
+bookdatalist = list(zip(bookinformation, percentages))
+everything_equallist = []
+for book in bookdatalist:
+	togetherlist = []
+	if book[0]:
+		togetherlist.append(book[0][0])
+		togetherlist.append(book[0][1])
+		togetherlist.append(book[0][2])
+	if book[-1]:
+		togetherlist.append(book[1][1])
+	everything_equallist.append(togetherlist)
+dob = open('bookinfolist.txt', 'wt', encoding = 'utf-8')
+for item in everything_equallist:
+	dob.write("%\n" % item)
+dob.close()
+
+#ldamodel = Lda(goth_work_matrix, num_topics=10, id2word = dictionary, passes = 20)
+#print(ldamodel.print_topics(num_topics=10, num_words=25))
 #def get_percentage(doc):
 	#corpus_percentage_vectors = []
 	#for textnovel in cleannovellist:
@@ -56,7 +97,8 @@ print(ldamodel.print_topics(num_topics=10, num_words=25))
 #t = open("C:\\Users\\Mickey\\Documents\\Github\\Gothicness-Percentage-Generator\\Gothic_novel_project\\gothic_novels\\Glenarvon.txt", "rt", encoding = "utf-8")
 #testdoc = t.read()
 #t.close()
-#get_percentage(testdoc)
+#percentage = get_percentage(testdoc)
+#print(percentage)
 
 
 
