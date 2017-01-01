@@ -22,7 +22,6 @@ for novel in os.listdir("C:\\Users\\Mickey\\Documents\\Github\\Gothicness-Percen
 			name_free = " ".join(ft for ft in punc_free if ft not in name)
 			tokens = nltk.word_tokenize(name_free)
 			tagged = nltk.pos_tag(tokens)
-			print(tagged[:50])
 			only_nouns_verbs_and_adjectives = []
 			for word in tagged:
 				word = list(word)
