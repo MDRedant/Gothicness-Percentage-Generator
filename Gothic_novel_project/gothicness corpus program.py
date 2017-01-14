@@ -40,8 +40,7 @@ from gensim import corpora
 dictionary = corpora.Dictionary(cleannovellist)
 goth_work_matrix = [dictionary.doc2bow(gothicwork) for gothicwork in cleannovellist]
 Lda = gensim.models.ldamodel.LdaModel
-Ldamodel = Lda(goth_work_matrix, num_topics = 10, id2word = dictionary, passes = 5, minimum_probability = 0 )
-print(Ldamodel.print_topics(num_topics = 10, num_words= 100))
+Ldamodel = Lda(goth_work_matrix, num_topics = 10, id2word = dictionary, passes = 7, minimum_probability = 0 )
 distr_of_topics_per_book = []
 for i in range(len(cleannovellist)):
 	distr_of_topics_per_book.append(Ldamodel[goth_work_matrix[i]])
@@ -50,11 +49,12 @@ booknumber = 0
 for book in distr_of_topics_per_book:
 	gothicness = 0
 	for theme in book:
-		print(theme)
-		for i in str(theme[0]):
-			gothicness += (theme[1]/10)
+		if theme[1] > 0.09:
+			gothicness += 1
+		else:
+			continue
 	booknumber += 1
-	gothicnesspercentage = booknumber , (gothicness*1000)
+	gothicnesspercentage = booknumber , gothicness
 	percentages.append(gothicnesspercentage)
 bookinformation = []
 for novel in novellist:
@@ -78,27 +78,13 @@ for book in bookdatalist:
 	if book[-1]:
 		togetherlist.append(book[1][1])
 	everything_equallist.append(togetherlist)
-print(everything_equallist)
 dob = open('bookinfolist.txt', 'wt', encoding = 'utf-8')
 for item in everything_equallist:
 	dob.write("\n" + str(item))
 dob.close()
 
-#ldamodel = Lda(goth_work_matrix, num_topics=10, id2word = dictionary, passes = 20)
-#print(ldamodel.print_topics(num_topics=10, num_words=25))
-#def get_percentage(doc):
-	#corpus_percentage_vectors = []
-	#for textnovel in cleannovellist:
-			#corpus_percentage_vectors.append(Lda[textnovel])
-	#corpus_average = numpy.average(numpy.array(corpus_percentage_vectors), axis = 0)
-	#doc_average = numpy.average(numpy.array(Lda[doc]), axis = 0)
-	#differences = numpy.linalg.norm(corpus_average - doc_average)
-	#return differences
-#t = open("C:\\Users\\Mickey\\Documents\\Github\\Gothicness-Percentage-Generator\\Gothic_novel_project\\gothic_novels\\Glenarvon.txt", "rt", encoding = "utf-8")
-#testdoc = t.read()
-#t.close()
-#percentage = get_percentage(testdoc)
-#print(percentage)
+
+
 
 
 
