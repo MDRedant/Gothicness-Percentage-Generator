@@ -22,25 +22,26 @@ for book in cleanedbooks:
 	percentagefloat = float(nospace)
 	if percentagefloat > 2:
 		mostgothicbooks.append(book)
-print(mostgothicbooks)
 mostgothicbooktexts = []
 import string
-punctuation = set(string.punctuation)
+punctuation = string.punctuation
 cleantitles = [] 
 for book in mostgothicbooks:
 	booktitlepartz = []
 	booktitle = book[0]
-	booktitleparts = booktitle.split()
-	firstword = booktitleparts[0].capitalize()
-	secondword = list(booktitleparts)[1].capitalize()
-	booktitlepartz.append(firstword)
-	booktitlepartz.append(secondword)
+	booktitleparts = booktitle.split(punctuation)
+	booktitlewords = booktitleparts[0]
+	booktitlewordz = booktitlewords.split()
+	for word in booktitlewordz:
+		word = word.capitalize()
+		booktitlepartz.append(word)
 	booktitleparty = []
 	for part in booktitlepartz:
 		booktitlesection = "".join(tse for tse in part if tse not in punctuation)
 		booktitleparty.append(booktitlesection)
 	cleanbooktitle = "_".join(booktitleparty)
 	cleantitles.append(cleanbooktitle)
+print(cleantitles)
 for book in cleantitles:
 	bookdirectory = "C:\\Users\\Mickey\\Documents\\Github\\Gothicness-Percentage-Generator\\Gothic_novel_project\\gothic_novels" + "\\" + book + ".txt"
 	t = open(bookdirectory, "rt", encoding = 'utf-8')
