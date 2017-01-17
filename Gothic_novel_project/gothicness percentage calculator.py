@@ -41,7 +41,6 @@ for book in mostgothicbooks:
 		booktitleparty.append(booktitlesection)
 	cleanbooktitle = "_".join(booktitleparty)
 	cleantitles.append(cleanbooktitle)
-print(cleantitles)
 for book in cleantitles:
 	bookdirectory = "C:\\Users\\Mickey\\Documents\\Github\\Gothicness-Percentage-Generator\\Gothic_novel_project\\gothic_novels" + "\\" + book + ".txt"
 	t = open(bookdirectory, "rt", encoding = 'utf-8')
@@ -220,7 +219,25 @@ def get_gothicnessnumber(doc):
 	togetheratlast.append(sub_8)
 	sub_9 = [sub9[0], (sub9[1]/sub9[2])]
 	togetheratlast.append(sub_9)
-	return togetheratlast
+	gothicnesspoints = 0
+	for topic in togetheratlast:
+		if topic[1] >= 10:
+			gothicnesspoints += 3
+		elif topic[1] >= 1:
+			gothicnesspoints += 2
+		elif topic[1] >= 0.1:
+			gothicnesspoints += 1
+		else:
+			gothicnesspoints += 0
+	if gothicnesspoints >= 20:
+		print('This work is definitly Gothic!')
+	elif gothicnesspoints >= 10:
+		print('This work is Gothic.')
+	elif gothicnesspoints >= 5:
+		print('This work has some Gothic elements.')
+	else:
+		print('This work is not Gothic.')
+	return gothicnesspoints
 k = open("C:\\Users\\Mickey\\Documents\\Github\\Gothicness-Percentage-Generator\\Gothic_novel_project\\gothic_novels\\Carmilla.txt", "rt", encoding = 'utf-8')
 testtext = k.read()
 k.close()
