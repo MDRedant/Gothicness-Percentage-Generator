@@ -52,7 +52,7 @@ for book in cleantitles:
 	from nltk.corpus import stopwords
 	stop = set(stopwords.words('english'))
 	exclude = set(string.punctuation + string.digits)
-	name = ['matilda', 'verezzi', 'zastrozzi', 'guiseppe', 'jerome', 'hippolita', 'manfred', 'frederic', 'bianca', 'isabella', 'antonia','clerval'
+	name = ['matilda', 'verezzi', 'zastrozzi', 'guiseppe', 'jerome', 'hippolita', 'manfred', 'frederic', 'bianca', 'isabella', 'antonia','clerval',
 		'theodore', 'glenarvon', 'avondale', 'calantha', 'emmeline', 'godolphin', 'lewis', 'clarke', 'merritt', 'ambrosio', 'edwin', 'madeline', 'elizabeth'
 		'philip', 'ellena', 'schedoni', 'vivaldi', 'adeline','morney','justine','bertrand','eugene','mary','oakendale','lorenzo','elisabeth','albert','vincent',
 		'eugene','rollo','rodger','randal','laura', 'walter', 'laurette','rosaline','percival','enrico','vathek','catherine','philip','hepzibah','montoni',
@@ -96,64 +96,14 @@ for book in cleantitles:
 import gensim	
 from gensim import corpora, models, similarities
 import numpy
-random_seed = 13
+random_seed = 17
 state = numpy.random.seed(random_seed)
 dictionary = corpora.Dictionary(mostgothicbooktexts)
 dictionary.save("dictionary")
 dic= corpora.Dictionary.load("dictionary")
 goth_work_matrix = [dic.doc2bow(gothicwork) for gothicwork in mostgothicbooktexts]
-Lda = gensim.models.ldamodel.LdaModel(goth_work_matrix, num_topics = 10, id2word = dic, random_state = state, chunksize = 100, passes= 40)
-print(Lda.print_topics(num_topics = 10, num_words = 20))
-index = similarities.MatrixSimilarity(Lda[goth_work_matrix])
-def get_difference(doc):
-	newfile = clean(doc)
-	vec_bow = dic.doc2bow(newfile)
-	vec_lda = Lda[vec_bow]
-	sims = index[vec_lda]
-	sims = sorted(enumerate(sims), key=lambda item: -item[1])
-	return sims
-def appoint_gothicness(doc):
-	differences = get_difference(doc)
-	print(differences)
-	security = 0
-	testdifferences1 = get_difference(testtext1)
-	testdifferences2 = get_difference(testtext2)
-	testdifferences3 = get_difference(testtext3)
-	testdifferences4 = get_difference(testtext4)
-	testdifferences5 = get_difference(testtext5)
-	if testdifferences1[0][0] == 1:
-			security += 1
-	if testdifferences2[0][0] != 1:
-			security += 1
-	if testdifferences3[0][0] == 1:
-			security += 1
-	if testdifferences4[0][0] == 1:
-			security += 1
-	if testdifferences5[0][0] != 1:
-			security += 1
-	if security == 5:
-		if differences[0][0] == 1:
-			print('This work is gothic.')
-		else:
-			print('This work is not gothic.')
-	else:
-		print('Try again.')
-k = open("C:\\Users\\Mickey\\Documents\\Github\\Gothicness_Generator\\Gothic_novel_project\\testfiles\\The_Hound_Of_The_Baskervilles.txt", "rt", encoding ="utf-8")
-testtext1 = k.read()
-k.close()
-z = open("C:\\Users\\Mickey\\Documents\\Github\\Gothicness_Generator\\Gothic_novel_project\\testfiles\\The_Story_Of_Porcelain.txt", "rt", encoding = 'utf-8')
-testtext2 = z.read()
-z.close()
-t = open("C:\\Users\\Mickey\\Documents\\Github\\Gothicness_Generator\\Gothic_novel_project\\testfiles\\The_Mysteries_Of_Udolpho.txt", "rt", encoding = 'utf-8')
-testtext3 = t.read()
-t.close()
-o = open("C:\\Users\\Mickey\\Documents\\Github\\Gothicness_Generator\\Gothic_novel_project\\testfiles\\The_Abbess.txt", "rt", encoding = 'utf-8')
-testtext4 = o.read()
-o.close()
-a = open("C:\\Users\\Mickey\\Documents\\Github\\Gothicness_Generator\\Gothic_novel_project\\testfiles\\Ulysses.txt", "rt", encoding = 'utf-8')
-testtext5 = a.read()
-a.close()
-c = open("C:\\Users\\Mickey\\Documents\\Github\\Gothicness_Generator\\Gothic_novel_project\\testfiles\\Pride_And_Prejudice.txt", "rt", encoding = 'utf-8')
-text = c.read()
-c.close()
-print(appoint_gothicness(text))
+corpora.BleiCorpus.serialize('gothicnesscorpus', goth_work_matrix)
+gothic = corpora.BleiCorpus('gothicnesscorpus')
+Lda = gensim.models.ldamodel.LdaModel(gothic, num_topics = 10, id2word = dic, random_state = state, chunksize = 100, passes= 40)
+index = similarities.MatrixSimilarity(Lda[gothic])
+index.save('gothic_similarities')
