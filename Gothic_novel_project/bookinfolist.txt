@@ -5,7 +5,7 @@
 ['\ufeffDRACULA', 'Bram Stoker', '1897', 1]
 ['\ufeffDRACULAS GUEST', 'Bram Stoker', '1914', 2]
 ['\ufeffDR JEKYLL AND MR HYDE ', 'Robert Louis Stevenson', '1886', 1]
-['\ufeffEDGAR HUNTLY OR, MEMOIRS OF A SLEEPWALKER', 'Charles Brockden Brown', '1799', 1]
+['\ufeffEDGAR HUNTLY, OR MEMOIRS OF A SLEEPWALKER', 'Charles Brockden Brown', '1799', 1]
 ['\ufeffEMMELINE, ORPHAN OF THE CASTLE ', 'Charlotte Turner Smith', '1788', 2]
 ['\ufeffFRANKENSTEIN, OR THE MODERN PROMETHEUS', 'Mary Wollstonecraft (Godwin) Shelley', '1818', 2]
 ['GLENARVON', 'Lady Caroline Lamb', '1816', 1]
