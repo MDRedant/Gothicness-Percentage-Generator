@@ -1,9 +1,9 @@
 import os
 novellist = []
 cleannovellist = []
-for novel in os.listdir("C:\\Users\\Mickey\\Documents\\Github\\Gothicness-Percentage-Generator\\Gothic_novel_project\\gothic_novels"):
+for novel in os.listdir("C:\\Users\\Mickey\\Documents\\Github\\Gothicness_Generator\\Gothic_novel_project\\gothic_novels"):
 	if novel.endswith(".txt"):
-		noveldirectory = "C:\\Users\\Mickey\\Documents\\Github\\Gothicness-Percentage-Generator\\Gothic_novel_project\\gothic_novels" + "\\" + novel
+		noveldirectory = "C:\\Users\\Mickey\\Documents\\Github\\Gothicness_Generator\\Gothic_novel_project\\gothic_novels" + "\\" + novel
 		f = open(noveldirectory, "rt", encoding = "utf-8")
 		textnovel = f.read()
 		f.close()
@@ -12,7 +12,8 @@ for novel in os.listdir("C:\\Users\\Mickey\\Documents\\Github\\Gothicness-Percen
 		import string
 		stop = set(stopwords.words('english'))
 		exclude = set(string.punctuation + string.digits)
-		name = ['matilda', 'verezzi', 'zastrozzi', 'guiseppe', 'jerome', 'hippolita', 'manfred', 'frederic', 'bianca', 'isabella', 'theodore', 'glenarvon', 'avondale', 'calantha', 'emmeline', 'godolphin', 'lewis', 'clarke', 'merritt', 'philip', 'ellena', 'schedoni', 'vivaldi', 'adeline']
+		name = ['matilda', 'verezzi', 'zastrozzi', 'guiseppe', 'jerome', 'hippolita', 'manfred', 'frederic', 'bianca', 'isabella', 'theodore', 'glenarvon', 
+		'avondale', 'calantha', 'emmeline', 'godolphin', 'lewis', 'clarke', 'merritt', 'philip', 'ellena', 'schedoni', 'vivaldi', 'adeline']
 		def clean(doc):
 			import nltk
 			stop_free = " ".join([i for i in doc.lower().split() if i not in stop])
