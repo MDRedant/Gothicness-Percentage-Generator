@@ -1,6 +1,7 @@
 import gensim	
 from gensim import corpora, models, similarities
 import numpy
+import string
 random_seed = 13
 state = numpy.random.seed(random_seed)
 from nltk.corpus import stopwords
@@ -47,7 +48,7 @@ def clean(doc):
 	return name_free
 def get_similarities_with_eighteenth_century(doc):
 	eighteenthcenturydict= corpora.Dictionary.load("eighteenthcenturydict")
-	eighteenth = corpora.Bleicorpus('eighteenthcorpus')
+	eighteenth = corpora.BleiCorpus('eighteenthcorpus')
 	Lda = gensim.models.ldamodel.LdaModel(eighteenth, num_topics = 10, id2word = eighteenthcenturydict, random_state = state, chunksize = 100, passes= 40)
 	index = similarities.MatrixSimilarity.load('similarities_with_eighteenth')
 	newfile = clean(doc)
@@ -58,7 +59,7 @@ def get_similarities_with_eighteenth_century(doc):
 	return sims
 def get_similarities_with_early_nineteenth_century(doc):
 	earlynineteenthcenturydict= corpora.Dictionary.load("earlynineteenthcenturydict")
-	earlynineteenth = corpora.Bleicorpus('earlynineteenthcorpus')
+	earlynineteenth = corpora.BleiCorpus('earlynineteenthcorpus')
 	Lda = gensim.models.ldamodel.LdaModel(earlynineteenth, num_topics = 10, id2word = earlynineteenthcenturydict, random_state = state, chunksize = 100, passes= 40)
 	index = similarities.MatrixSimilarity.load('similarities_with_early_nineteenth')
 	newfile = clean(doc)
@@ -69,7 +70,7 @@ def get_similarities_with_early_nineteenth_century(doc):
 	return sims
 def get_similarities_with_late_nineteenth_century(doc):
 	latenineteenthcenturydict= corpora.Dictionary.load("latenineteenthcenturydict")
-	latenineteenth = corpora.Bleicorpus('earlynineteenthcorpus')
+	latenineteenth = corpora.BleiCorpus('earlynineteenthcorpus')
 	Lda = gensim.models.ldamodel.LdaModel(latenineteenth, num_topics = 10, id2word = latenineteenthcenturydict, random_state = state, chunksize = 100, passes= 40)
 	index = similarities.MatrixSimilarity.load('similarities_with_eighteenth')
 	newfile = clean(doc)
@@ -79,8 +80,8 @@ def get_similarities_with_late_nineteenth_century(doc):
 	sims = sorted(enumerate(sims), key=lambda item: -item[1])
 	return sims
 def get_similarities_with_twentieth_century(doc):
-	twentiethcenturydict= corpora.Dictionary.load("twentiethcenturydict")
-	twentieth = corpora.Bleicorpus('twentiethcorpus')
+	twentiethcenturydict= corpora.Dictionary.load("earlytwentiethcenturydict")
+	twentieth = corpora.BleiCorpus('earlytwentiethcorpus')
 	Lda = gensim.models.ldamodel.LdaModel(twentieth, num_topics = 10, id2word = twentiethcenturydict, random_state = state, chunksize = 100, passes= 40)
 	index = similarities.MatrixSimilarity.load('similarities_with_twentieth')
 	newfile = clean(doc)
@@ -88,12 +89,49 @@ def get_similarities_with_twentieth_century(doc):
 	vec_lda = Lda[vec_bow]
 	sims = index[vec_lda]
 	sims = sorted(enumerate(sims), key=lambda item: -item[1])
+	return sims
 def predict_timeperiod(doc):
 	eighteen = get_similarities_with_eighteenth_century(doc)
 	nineteen1 = get_similarities_with_early_nineteenth_century(doc)
 	nineteen2 = get_similarities_with_late_nineteenth_century(doc)
 	twenty = get_similarities_with_twentieth_century(doc)
-	return sims
+	eighteensim = 0
+	number_of_texts1 = 0
+	for i in eighteen:
+		number_of_texts1 += 1
+		eighteensim += i[1]
+	earlynineteensim = 0
+	number_of_texts2 = 0
+	for d in nineteen1:
+		number_of_texts2 += 1
+		earlynineteensim += d[1]
+	latenineteensim = 0
+	number_of_texts3 = 0
+	for f in nineteen2:
+		number_of_texts3 += 1
+		latenineteensim += f[1]
+	twentysim = 0
+	number_of_texts4 = 0
+	for k in twenty:
+		number_of_texts4 += 1
+		twentysim += k[1]
+	sim18 = eighteensim / number_of_texts1
+	earlysim19 = earlynineteensim / number_of_texts2
+	latesim19 = latenineteensim / number_of_texts3
+	sim20 = twentysim / number_of_texts4
+	numbers = []
+	numbers.append(sim18)
+	numbers.append(earlysim19)
+	numbers.append(latesim19)
+	numbers.append(sim20)
+	if max(numbers) == sim18:
+		print('This work was probably written somewhere between 1751 and 1800.')
+	if max(numbers) == earlysim19:
+		print('This work was probably written somewhere between 1801 and 1850.')
+	if max(numbers) == latesim19:
+		print('This work was probably written somewhere between 1851 and 1900.')
+	if max(numbers) == sim20:
+		print('This work was probably written somewhere between 1901 and 1950.')	
 c = open("C:\\Users\\Mickey\\Documents\\Github\\Gothicness_Generator\\Gothic_novel_project\\testfiles\\Pride_And_Prejudice.txt", "rt", encoding = 'utf-8')
 text = c.read()
 c.close()
