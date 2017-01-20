@@ -95,6 +95,10 @@ def predict_timeperiod(doc):
 	nineteen1 = get_similarities_with_early_nineteenth_century(doc)
 	nineteen2 = get_similarities_with_late_nineteenth_century(doc)
 	twenty = get_similarities_with_twentieth_century(doc)
+	print(eighteen)
+	print(nineteen1)
+	print(nineteen2)
+	print(twenty)
 	eighteensim = 0
 	number_of_texts1 = 0
 	for i in eighteen:
@@ -125,14 +129,18 @@ def predict_timeperiod(doc):
 	numbers.append(latesim19)
 	numbers.append(sim20)
 	if max(numbers) == sim18:
-		print('This work was probably written somewhere between 1751 and 1800.')
+		print('The themes of this work show most similarity with themes of the 1751 to 1800 period.')
 	if max(numbers) == earlysim19:
-		print('This work was probably written somewhere between 1801 and 1850.')
+		print('The themes of this work show most similarity with themes of the 1801 to 1850 period.')
 	if max(numbers) == latesim19:
-		print('This work was probably written somewhere between 1851 and 1900.')
+		print('The themes of this work show most similarity with themes of the 1851 to 1900 period.')
 	if max(numbers) == sim20:
-		print('This work was probably written somewhere between 1901 and 1950.')	
-c = open("C:\\Users\\Mickey\\Documents\\Github\\Gothicness_Generator\\Gothic_novel_project\\testfiles\\Pride_And_Prejudice.txt", "rt", encoding = 'utf-8')
+		print('The themes of this work show most similarity with themes of the 1901 to 1950 period.')	
+c = open("C:\\Users\\Mickey\\Documents\\Github\\Gothicness_Generator\\Gothic_novel_project\\testfiles\\Ulysses.txt", "rt", encoding = 'utf-8')
+text = c.read()
+c.close()
+print(predict_timeperiod(text))
+c = open("C:\\Users\\Mickey\\Documents\\Github\\Gothicness_Generator\\Gothic_novel_project\\testfiles\\The_Great_God_Pan.txt", "rt", encoding = 'utf-8')
 text = c.read()
 c.close()
 print(predict_timeperiod(text))
